@@ -8,29 +8,10 @@ const User = mongoose.model('users', new mongoose.Schema({
     lastName: { type: String, required: true },
   },
 
-  dob: {
-    type: Date,
-    required: true
-  },
-
-  gender: {
-    type: Number,
-    min: 0,
-    max: 2,
-    required: true
-  },
-
   email: {
     type: String,
     minlength: 7,
     maxlength: 100,
-    required: true
-  },
-
-  cnic: {
-    type: String,
-    minlength: 15,
-    maxlength: 15,
     required: true
   },
 
@@ -41,16 +22,15 @@ const User = mongoose.model('users', new mongoose.Schema({
     required: true
   },
 
-  address: {
-    type: String,
-    minlength: 5,
-    maxlength: 100,
-    required: true
+  wallet: {
+    type: Number,
+    default: 100
   },
 
-  designation: {
-    type: Number,
-    required: true
+  benchmark: {
+    Mathematical: {type: String},
+    Image: {type: String},
+    Video: {type: String}
   },
 
   flag: {
@@ -66,13 +46,7 @@ function validateUser(user) {
     firstName: Joi.string().min(2).max(50).required(),
     lastName: Joi.string().min(2).max(50).required(),
     phone: Joi.string().min(11).max(11).required(),
-    address: Joi.string().min(5).max(100).required(),
-    dob: Joi.date().required(),
-    gender: Joi.number().min(0).max(2).required(),
     email: Joi.string().regex(/^(([^<>()\[\]\\.,;:\s@“]+(\.[^<>()\[\]\\.,;:\s@“]+)*)|(“.+“))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
-    cnic: Joi.string().regex(/^[0-9+]{5}-[0-9+]{7}-[0-9]{1}$/).required(),
-    designation: Joi.number().min(-1).max(100).required(),
-    userType: Joi.number().required(),
     username: Joi.string().required(),
     password: Joi.string().required(),
     _id: Joi.objectId()

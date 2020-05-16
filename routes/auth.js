@@ -26,17 +26,19 @@ router.post('/login', async (req, res, next) => {
 /* Sign up  */
 router.post('/signup', async (req, res, next) => {
 	const { error } = validate(req.body);
-  	if (error) return res.status(403).send(error.details[0]);
-  
+	console.log('1')  
+	if (error) return res.status(403).send(error.details[0]);
+	console.log('2')
 	try {
-		const { firstName, lastName, phone, address, dob, cnic, designation, gender, email, userType, username, password } = req.body;
+		console.log('3')
+		const { firstName, lastName, phone, email, username, password } = req.body;
 		let hashedPassword;
 
-		let user = await User.findOne({ phone });
-		if (user) return res.status(409).send("This phone number already exists");
-		
-		user = await User.findOne({ cnic });
-		if (user) return res.status(409).send("This cnic number already exists");
+		let userEmail = await User.findOne({ email });
+		if (userEmail) return res.status(409).send("This email already exists");
+
+		let userPhone = await User.findOne({ phone });
+		if (userPhone) return res.status(409).send("This phone number already exists");
 
 		let auth = await Auth.findOne({ username });
 		if (auth) return res.status(409).send("This username already exists");
@@ -46,13 +48,13 @@ router.post('/signup', async (req, res, next) => {
 
 		if (!hashedPassword) return res.status(400).send("Could not hash the password");
     
-		user = new User({ name: { firstName, lastName }, phone, address, dob, gender, cnic, email, phone, designation, userType });
+		user = new User({ name: { firstName, lastName }, email, phone});
 		await user.save();
 
 		auth = new Auth({ username, password: hashedPassword, user_id: user._id });
 		await auth.save();
 
-		let data = { user, username }
+		let data = { user, username };
 		 
 		const token = jwt.sign({ data }, 'jwtPrivateKey');
 		res.status(200).header('x-auth-token', token).send(data);
