@@ -17,7 +17,7 @@ router.post('/login', async (req, res, next) => {
 
 	const user = await User.findById(auth.user_id);
 	if(!user) return res.status(404).send("The user data is missing");
-	const data = { user, username }
+	const data = { user, username };
 
 	const token = jwt.sign({ data }, 'jwtPrivateKey');
 	return res.header('x-auth-token', token).send(data);
@@ -25,12 +25,9 @@ router.post('/login', async (req, res, next) => {
 
 /* Sign up  */
 router.post('/signup', async (req, res, next) => {
-	const { error } = validate(req.body);
-	console.log('1')  
+	const { error } = validate(req.body);  
 	if (error) return res.status(403).send(error.details[0]);
-	console.log('2')
 	try {
-		console.log('3')
 		const { firstName, lastName, phone, email, username, password } = req.body;
 		let hashedPassword;
 

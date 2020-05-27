@@ -6,5 +6,5 @@ module.exports = function(app){
     app.use('/', defualt),
     app.use('/api/v1/auth', auth),
     app.use('/api/v1/user', user)
-}
+};
 
